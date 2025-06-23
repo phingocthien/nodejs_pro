@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content=" Dự án laptopshop" />
+    <meta name="author" content="Hỏi Dân IT" />
+    <title>USER-LAPTOPSHOP</title>
+     <!-- style css -->
+    <link href="/admin/css/styles.css" rel="stylesheet" />
+    <!-- fontawesome -->
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="sb-nav-fixed">
+   <!-- header -->
+ <%- include('../layout/header'); -%>
+    <div id="layoutSidenav">
+<!-- navbar -->
+ <%- include('../layout/navbar'); -%>
+<!-- content -->
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4">Manager User</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item "><a href="/admin/dashboard">dashboard</a></li>
+                        <li class="breadcrumb-item active">Users</li>
+                    </ol>  
+                    <div class="d-flex justify-content-between mb-4">
+                        <h3> List Users: </h3>
+                       <a href="/admin/user/create-user" class="btn btn-warning">Create new user</a>
+                      </div>
+                      <hr>
+                      <!-- TABLE -->
+                    <table class="table table-bordered text-center">
+                        <thead>
+                            <tr>
+                                <th>id</th>
+                                <th>Name </th>
+                                <th>Email</th>
+                                <th>Address</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% users.forEach( function (user) { %>
+                                <tr>
+                                    <td><%= user.id %></td>
+                                    <td><%= user.fullName %></td>
+                                    <td><%= user.username %></td>
+                                    <td><%= user.address %></td>
+                                    <td>
+                                        <div class="d-flex justify-content-center text-center">
+                                            <form action="/admin/user/handle-delete-user/<%= user.id %>" method="post">
+                                                <button type="submit" class="btn btn-warning me-3">DELETE</button>
+                                            </form>
+                                            <form action="/admin/user/view-user/<%= user.id %>" method="post">
+                                                <button type="submit" class="btn btn-danger">VIEW</button>
+                                            </form>
+                                        </div>
+                                       
+                                    </td>
+                                </tr>
+                            <% }) %>
+                            
+                            
+                        </tbody>
+                      </table>  
+                      <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+                          <li class="page-item">
+                            <a class="<%=currentPage==1 ? 'disabled page-link' : 'page-link' %>" 
+                                href="/admin/user?page=<%=currentPage-1%>">Previous</a>
+                        </li>
+                          <% for( var i=1; i<=totalPageUsers ;i++) {%>
+                          <li class="page-item">
+                            <a class="<%=currentPage == i ?'active page-link' :'page-link' %> "
+                                href="/admin/user?page=<%=i%>">
+                                <%=i%>
+                            </a>
+                          </li>
+                          <%}%>
+                          <li class="page-item">
+                            <a class="<%=currentPage==totalPageUsers ?'disabled page-link' : 'page-link' %>" 
+                                href="/admin/user?page=<%=currentPage+1%>">Next</a></li>
+                        </ul>
+                      </nav>
+                      
+                </div>
+                
+            </main>
+            
+           <!-- footer -->
+          <%- include('../layout/footer'); -%> 
+
+         </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+    <script src="/admin/js/scripts.js"></script>
+
+</body>
+
+</html> 

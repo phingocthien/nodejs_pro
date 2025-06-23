@@ -1,0 +1,138 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+//schema.prisma model
+//model users
+model User {
+  id          Int     @id @default(autoincrement())
+  username    String  @unique @db.VarChar(255)
+  password    String  @db.VarChar(255)
+  fullName    String? @db.VarChar(255)
+  address     String? @db.VarChar(255)
+  phone       String? @db.VarChar(255)
+  accountType String  @db.VarChar(50)
+  avatar      String? @db.VarChar(255)
+  //relationship
+  role        Role    @relation(fields: [roleId], references: [id])
+  roleId      Int
+  cart        Cart?
+  Order       Order[]
+
+  @@map("users")
+}
+
+// model session (phiên giao dịch)
+model session {
+  id        String   @id
+  sid       String   @unique
+  data      String   @db.MediumText
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("sessions")
+}
+
+//model role (quyền hạn)
+model Role {
+  id          Int    @id @default(autoincrement())
+  name        String @unique @db.VarChar(255)
+  description String @db.VarChar(255)
+
+  User User[]
+
+  @@map("roles")
+}
+
+// model Product( sản phẩm)
+model Product {
+  id         Int     @id @default(autoincrement())
+  name       String  @db.VarChar(255)
+  price      Int
+  image      String? @db.VarChar(255)
+  detailDesc String  @db.MediumText // chi tiết
+  ShortDesc  String  @db.VarChar(50) // ngắn gọn
+  quality    Int // chất lượng
+  sold       Int?    @default(0) // mặc định bán 0 sản phẩm
+  factory    String  @db.VarChar(255) // sản xuất
+  target     String  @db.VarChar(255) // mục tiêu
+
+  CartDetail  CartDetail[]
+  orderDetail orderDetail[]
+
+  @@map("products")
+}
+
+//model order(Đặt hàng)
+model Order {
+  id              Int    @id @default(autoincrement())
+  totalPrice      String @db.VarChar(255)
+  receiverAddress String @db.VarChar(255) // địa chỉ người nhận
+  receiverName    String @db.VarChar(255) // Tên người nhận
+  receiverPhone   String @db.VarChar(255) // SDT người nhận
+  status          String @default("PENDING") // Trạng thái người nhận mặc định là pending
+
+  paymentMethod String //COD , Banking , hình thức thanh toán
+  statusMethod  String // Trạng thái thanh toán
+  paymentRef    String? // nếu muốn thanh toán qua ngân hàng giúp lấy ra id
+  //relationship
+  user          User          @relation(fields: [userId], references: [id])
+  userId        Int
+  orderDetail   orderDetail[]
+
+  @@map("orders")
+}
+
+//model order_Detail
+model orderDetail {
+  id        Int     @id @default(autoincrement())
+  price     Int
+  quantity  Int // SL
+  //RelationShip
+  order     Order   @relation(fields: [orderId], references: [id])
+  orderId   Int
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int
+
+  @@unique([orderId, productId]) // Một cặp cart + product chỉ xuất hiện 1 lần
+  @@map("orderDetail")
+}
+
+//model CartDetail (chi tiết giỏ hàng)
+model CartDetail {
+  id         Int     @id @default(autoincrement())
+  quantity   Int // số lượng sản phẩm
+  price      Int // giá sản phẩm
+  //relationship
+  cart       Cart    @relation(fields: [cart_id], references: [id])
+  cart_id    Int
+  product    Product @relation(fields: [product_id], references: [id])
+  product_id Int
+
+  @@unique([cart_id, product_id]) // Một cặp cart + product chỉ xuất hiện 1 lần
+  @@map("cartDetails")
+}
+
+//model Cart (giỏ hàng)
+model Cart {
+  id         Int          @id @default(autoincrement())
+  sum        Int
+  //relationship
+  user       User         @relation(fields: [user_id], references: [id])
+  user_id    Int          @unique
+  cartDetail CartDetail[]
+
+  @@map("carts")
+}

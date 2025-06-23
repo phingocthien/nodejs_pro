@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content=" Dự án laptopshop" />
+    <meta name="author" content="Hỏi Dân IT" />
+    <title>Order-LaptopShop</title>
+     <!-- style css -->
+    <link href="/admin/css/styles.css" rel="stylesheet" />
+    <!-- fontawesome -->
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="sb-nav-fixed">
+header
+ <%- include('../layout/header'); -%>
+    <div id="layoutSidenav">
+     
+ <%- include('../layout/navbar'); -%>
+
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4 d-flex justify-content-between">
+                    <div>
+                        <h1 class="mt-4">Manager Order</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item"><a href="dashboard">Dashboard</a></li>
+                            <li class="breadcrumb-item active ">Order Detail</li>
+                        </ol>
+                    </div>
+                    <div>
+                        <a href="/admin/order">
+                            <button  type="submit" class="btn btn-warning my-5">Back</button>
+                        </a>
+                       
+                    </div>
+                   
+                </div>
+                <table class="table table-bordered text-center">
+                    <thead>
+                        <tr>
+                            <th>Sản Phẩm</th>
+                            <th>Tên</th>
+                            <th>Giá cả</th>
+                            <th>Số lượng</th>
+                            <th>Thành tiền</th>
+                        </tr>
+                    </thead>  
+                    <tbody>
+                        <% orderViews.forEach( function (orderView) { %>
+                            <tr style="padding-top: 30px;">
+                                <td> 
+                                    <img src="/images/product/<%= orderView.product.image %>" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
+                                </td>
+                                <td class="pt-4">
+                                    <%= orderView?.product?.name %>
+                                </td>
+                                <td class="pt-4"> <%= new Intl.NumberFormat('vi-VN', { style: 'currency' , currency: 'VND'
+                                }).format(orderView.product.price) %></td>
+                                <td class="pt-4"><%= orderView.quantity %></td>
+                                <td class="pt-4"> <%= (orderView.price * orderView.quantity).toLocaleString('vi-VN', {style: 'currency', currency: 'VND'}) %></td>
+                               
+                            </tr>
+                        <% }) %>
+                        
+                        </a>
+                    </tbody>
+                  </table>  
+                 
+                  
+            </main>
+           <!-- footer -->
+          <%- include('../layout/footer'); -%> 
+
+         </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+    <script src="/admin/js/scripts.js"></script>
+
+</body>
+
+</html> 

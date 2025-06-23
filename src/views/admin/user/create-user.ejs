@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content=" Dự án laptopshop" />
+    <meta name="author" content="Hỏi Dân IT" />
+    <title>USER-LAPTOPSHOP</title>
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+     <!-- style css -->
+    <link href="/admin/css/styles.css" rel="stylesheet" />
+    <!-- fontawesome -->
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+      // Preview Image jquery
+      $(document).ready(() => {
+          const avatarFile = $("#avatarFile");
+          avatarFile.change(function (e) {
+              const imgURL = URL.createObjectURL(e.target.files[0]);
+              $("#avatarPreview").attr("src", imgURL);
+              $("#avatarPreview").css({ "display": "block" });
+          });
+      });
+  </script>
+
+</head>
+
+<body class="sb-nav-fixed">
+<!-- header -->
+ <%- include('../layout/header'); -%>
+<!-- navBar -->
+    <div id="layoutSidenav">
+ <%- include('../layout/navbar'); -%>
+
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <h1 class="mt-4">Manager User</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item "><a href="/admin">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Create-user</li>
+                    </ol>    
+                </div>
+                <div style="width: 600px; margin: auto">
+                  <h3>Create a user</h3>
+                  <form action="/admin/user/handle-create-user" method="POST" enctype="multipart/form-data">
+                    <!-- name -->
+                      <div class="mb-3">
+                          <label  class="form-label">Name</label>
+                          <input name="fullName" type="text"  class="form-control"  placeholder="your name">
+                        </div>
+                        <!-- email -->
+                        <div class="mb-3">
+                          <label  class="form-label">Email </label>
+                          <input name="username" type="email" class="form-control"  placeholder="name@example.com">
+                        </div>
+
+                        <div>
+                          <div class="d-flex justify-content-between">
+                            <!-- phone -->
+                            <div class="col-md-6">
+                              <label for="inputCity" class="form-label">Phone</label>
+                              <input type="text" name="phone" class="form-control" id="inputCity">
+                            </div>
+                               <!-- Role (QUAN TRỌNG: name="role") -->
+                            <div class="col-md-4">
+                              <label  class="form-label">Role</label>
+                              <select name="role" class="form-select">
+                                <% roles.forEach((role,index) => { %>
+                                  <option value="<%- role.id %>" >
+                                    <%- role.name %>
+                                  </option>
+                                <%})%>
+                              </select>
+                            </div>
+                          </div>                                       
+                        </div>
+                         <!-- Upload avatar -->
+                        <div class="my-3">
+                          <label for="formFile" >UploadFile</label>
+                          <input name="avatar" class="form-control" type="file" id="avatarFile" accept=".png, .jpg, .jpeg">
+                        </div>
+                        <img  style="max-height: 250px; display: none; margin: 0 auto;" alt="avatar preview" id="avatarPreview" />
+
+                        <div class="my-3">
+                          <label  class="form-label">Address</label>
+                          <textarea name="address" class="form-control"  rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                          <button type="submit" class="btn btn-danger">submit</button>
+                        </div>
+                  </form>
+                  
+              </div>
+            </main>
+            
+           <!-- footer -->
+          <%- include('../layout/footer'); -%> 
+
+         </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+    <script src="/admin/js/scripts.js"></script>
+   
+
+</html> 
