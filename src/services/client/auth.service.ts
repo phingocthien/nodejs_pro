@@ -17,7 +17,8 @@ export const isEmailExist = async (email: string)  => {
   export const registerNewUser = async (
    fullname: string,
    email: string,
-   password: string
+   password: string,
+   avatar:string
  ) => {
    // Băm mật khẩu
    const newPassword = await hashPassword(password);
@@ -39,6 +40,7 @@ export const isEmailExist = async (email: string)  => {
        fullName: fullname,
        accountType: ACCOUNT_TYPE.SYSTEM,
        roleId: userRole.id,
+       avatar,
      },
    });
  

@@ -1,5 +1,9 @@
 import { Request, Response } from "express";
-import { deleteProductInCart, getProductInCart, handlePlaceOrder, updateCartDetailBefore } from "../../services/client/productCart.service";
+import { getProductInCart } from "../../services/client/productInCart.service";
+import { getPaginatedProductHomePage, getTotalProductPageHomePage } from "../../services/client/productHome.service";
+import { processOrder } from "../../services/client/processOrder.service";
+import { deleteProductInCart } from "../../services/client/deleteProductInCart.service";
+import { updateCartDetailBefore } from "../../services/client/updateCartDetail.service";
 
 export const getCartPage = async (req: Request, res: Response) => {
     const user = req.user;
@@ -9,14 +13,15 @@ export const getCartPage = async (req: Request, res: Response) => {
 
     try {
         const cartDetails = await getProductInCart(user.id);
-
+    // total price trong cartDetail
         const totalPrice = cartDetails
             .map(item => item.price * item.quantity)
             .reduce((a, b) => a + b, 0);
-
+        const cartId = cartDetails.length ? cartDetails[0].cart_id : 0
         return res.render("client/product/cart.ejs", {
             cartDetails,
-            totalPrice
+            totalPrice,
+            cartId
         });
     } catch (error) {
         console.error("Error loading cart page:", error);
@@ -50,14 +55,14 @@ export const deleteProductCart = async (req: Request, res: Response) => {
     }
 };
 
-// update quantity trước khi checkout 
+// update quantity , sum(cart) trước khi checkout 
 export const postQuantityBeforeUpdate= async (req:Request , res :Response)=>{
     const user =req.user 
+    const {cartId} = req.body
     if(!user) return res.redirect("/login")
-   console.log(req.body)
+        // get cartDetail từ body 
    const currentCartDetail :{id:string,quantity:string}[] = req.body?.cartDetails??[]
-   await updateCartDetailBefore(currentCartDetail)
-   console.log(req.body)
+   await updateCartDetailBefore(currentCartDetail,cartId)
     return res.redirect("/checkout")
 
 }
@@ -72,28 +77,36 @@ export const getCheckOutPage = async(req:Request ,res:Response)=>{
     })   
 }
 export const postPlaceOrder = async(req:Request,res:Response)=>{
-const user = req .user
+const user = req.user
 if(!user) return res.redirect("/login")
  const{totalPrice,receiverName,receiverAddress,receiverPhone }=req.body ||{}
-  await handlePlaceOrder(user.id,receiverName,receiverAddress,receiverPhone,totalPrice)
-    return res.redirect("/thank")
+ // Kiểm tra dữ liệu đầu vào cơ bản (Tùy chọn nhưng nên có)
+ if (!totalPrice || !receiverName || !receiverAddress || !receiverPhone) {
+    console.log('error', 'Vui lòng cung cấp đầy đủ thông tin đặt hàng.');
+    return res.redirect("/checkout"); // Hoặc trang đặt hàng
+}
+// gọi hàm processOrder 
+  const data = await processOrder(user.id,receiverName,receiverAddress,receiverPhone,totalPrice)
+  if(data.success){
+   return res.redirect("/thank")
+  }
+   return res.redirect("/checkout")
 }
 // 
 
 export const getPlaceOrder = async (req: Request, res: Response) => {
     const user = req.user;
-
     if (!user) {
         return res.redirect("/login");
     }
-    try {
+
+        let currentPages = parseInt(req.query.page as string) || 1;
+        if (currentPages < 1) currentPages = 1;
+        const products = await getPaginatedProductHomePage(currentPages,8);
+        const totalPages = await getTotalProductPageHomePage(8)
         return res.render("client/product/thank", {
-            user
+            products,
+            page:currentPages,
+            totalPages
         });
-    } catch (error) {
-        console.error("Error loading thank you page:", error);
-        return res.status(500).render("client/500", {
-            message: "Đã xảy ra lỗi khi tải sản phẩm."
-        });
-    }
 };

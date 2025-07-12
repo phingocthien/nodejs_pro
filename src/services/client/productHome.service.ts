@@ -44,7 +44,7 @@ const handleProductCart =async( quantity:number,productId:number , user:Express.
       where:{id:exitingCart.id},
       data:{
         sum: {
-          // tăng giá trị number theo quality
+          // tăng giá trị number theo quantity
           increment: quantity
         }
       }

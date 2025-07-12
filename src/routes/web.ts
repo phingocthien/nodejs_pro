@@ -34,7 +34,7 @@ const webRoutes =( app:Express)=>{
     );
     router.post("/logout",postLogOut)
     router.get("/register",getRegisterPage)
-    router.post("/register",postRegisterPage)
+    router.post("/register",fileUploadMiddleware("avatar","images/user"),postRegisterPage)
 
    // cart
    router.post("/add-product-to-cart/:id",postAddProductToCart)

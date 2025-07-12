@@ -154,6 +154,7 @@
                             <!-- update-quantity-before-checkout -->
                             <form action="/update-quantity-before-checkout" method="post">
                                 <div style="display: none">
+                                    <input type="text" name="cartId" value="<%= cartId %>">
                                     <% cartDetails.forEach( function (cartDetail, index) { %>
                                         <div class="mb-3">
                                             <div class="form-group">

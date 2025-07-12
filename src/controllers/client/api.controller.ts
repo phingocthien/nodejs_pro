@@ -23,6 +23,7 @@ export const getAllUserApi = async(req:Request,res:Response)=>{
  } 
  export const postCreateUserApi = async(req:Request,res:Response)=>{
     const {fullname,email,password}=req.body as TRegisterSchema
+    const avatar = req.file?.filename ?? ""
     const validate = await registerSchema.safeParseAsync(req.body)
     if (!validate.success) {
         // error
@@ -35,7 +36,7 @@ export const getAllUserApi = async(req:Request,res:Response)=>{
        return;
       }
   //success
-    await registerNewUser(fullname,email,password)
+    await registerNewUser(fullname,email,password,avatar)
     res.status(201).json({
      data:"create user success"
     })

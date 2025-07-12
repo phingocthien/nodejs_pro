@@ -21,25 +21,24 @@ header
      
  <%- include('../layout/navbar'); -%>
 
-        <div id="layoutSidenav_content">
+        <div id="layoutSidenav_content" style="top: 32px;">
             <main>
-                <div class="container-fluid px-4 d-flex justify-content-between">
+                <div class="container-fluid px-4">
                     <div>
                         <h1 class="mt-4">Manager Order</h1>
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item"><a href="dashboard">Dashboard</a></li>
-                            <li class="breadcrumb-item active ">Order Detail</li>
+                            <li class="breadcrumb-item active "><a href="Order Detail">Order Detail</a></li>
                         </ol>
                     </div>
-                    <div>
-                        <a href="/admin/order">
-                            <button  type="submit" class="btn btn-warning my-5">Back</button>
+                    <div class="d-flex justify-content-between mb-4">
+                        <h3></h3>
+                        <a href="/admin/order"  class="btn btn-warning">Back
                         </a>
-                       
                     </div>
                    
                 </div>
-                <table class="table table-bordered text-center">
+                <table class="table table-bordered text-center w-75 m-auto text-white">
                     <thead>
                         <tr>
                             <th>Sản Phẩm</th>

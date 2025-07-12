@@ -14,23 +14,23 @@
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 </head>
 
-<body class="sb-nav-fixed">
+<body class="sb-nav-fixed" style="overflow: hidden">
 header
  <%- include('../layout/header'); -%>
     <div id="layoutSidenav">
      
  <%- include('../layout/navbar'); -%>
 
-        <div id="layoutSidenav_content">
-            <main>
+        <div id="layoutSidenav_content" style="top: 32px;">
+            <main class="center">
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">Manager Order</h1>
+                    <h3 class="mt-4">Manager Order</h3>
                     <ol class="breadcrumb mb-4">
                         <li class="breadcrumb-item"><a href="dashboard">Dashboard</a></li>
                         <li class="breadcrumb-item active ">Order</li>
                     </ol>
                 </div>
-                <table class="table table-bordered text-center">
+                <table class="table table-bordered text-center w-75 m-auto text-white">
                     <thead>
                         <tr>
                             <th>id</th>
@@ -64,7 +64,7 @@ header
                     </tbody>
                  
                   </table> 
-                  <nav aria-label="Page navigation example">
+                  <nav aria-label="Page navigation example" class="mt-3 ">
                     <ul class="pagination justify-content-center">
                       <li class="page-item">
                         <a class="<%=currentPage==1 ? 'disabled page-link' : 'page-link' %>" 

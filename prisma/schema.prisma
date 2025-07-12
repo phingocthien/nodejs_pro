@@ -64,7 +64,7 @@ model Product {
   image      String? @db.VarChar(255)
   detailDesc String  @db.MediumText // chi tiết
   ShortDesc  String  @db.VarChar(50) // ngắn gọn
-  quality    Int // chất lượng
+  quantity   Int // chất lượng
   sold       Int?    @default(0) // mặc định bán 0 sản phẩm
   factory    String  @db.VarChar(255) // sản xuất
   target     String  @db.VarChar(255) // mục tiêu

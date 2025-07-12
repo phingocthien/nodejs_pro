@@ -22,6 +22,7 @@ const getRegisterPage = async(req:Request,res:Response)=>{
     username: "",
     password: "",
     confirmPassword: "",
+    avatar:""
     
   };
     return res.render("client/auth/register",{
@@ -33,6 +34,7 @@ const getRegisterPage = async(req:Request,res:Response)=>{
 
 const postRegisterPage = async(req:Request,res:Response)=>{
     const {fullname,email,password,confirmPassword}=req.body as TRegisterSchema
+    const avatar = req.file?.filename ?? ""
     const validate = await registerSchema.safeParseAsync(req.body)
     // kiểm tra validate và trả về olddata
     if (!validate.success) {``
@@ -41,7 +43,7 @@ const postRegisterPage = async(req:Request,res:Response)=>{
         const errors = errorZod?.map(item => `${item.message} (${item.path[0]})`);
     
         // Giữ lại dữ liệu người dùng đã nhập để fill form lại
-        const oldData = { fullname ,email , password, confirmPassword  };
+        const oldData = { fullname ,email , password, confirmPassword, avatar  };
     
         return res.render("client/auth/register",{
             errors,
@@ -49,7 +51,7 @@ const postRegisterPage = async(req:Request,res:Response)=>{
         })
       }
     // Nếu hợp lệ, tiếp tục xử lý (ví dụ tạo tài khoản, chuyển trang, ...)
-    await registerNewUser(fullname,email,password)
+    await registerNewUser(fullname,email,password,avatar)
   // Ví dụ: return res.redirect("/login");
   return res.redirect("/login");
 }

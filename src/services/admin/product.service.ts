@@ -8,7 +8,7 @@ const  handleCreateProduct = async(
     price:number,
     ShortDesc:string,
     detailDesc:string,
-    quality:number,
+    quantity:number,
     factory:string,
     target:string,
     image? : string
@@ -19,7 +19,7 @@ const  handleCreateProduct = async(
             price,
             ShortDesc,
             detailDesc,
-            quality,
+            quantity,
             factory,
             target,
             ...(image !== undefined && {image})
@@ -67,7 +67,7 @@ const  handleCreateProduct = async(
       price:number,
       detailDesc:string,
       ShortDesc:string,
-      quality :number,
+      quantity :number,
       factory:string,
       target:string,
       image?:string,// nên để avatar là optional
@@ -81,7 +81,7 @@ const  handleCreateProduct = async(
               price,
               detailDesc,
               ShortDesc,
-              quality,
+              quantity,
               factory,
               target,
               ...(image!== "" && { image }) // chỉ cập nhật avata nếu có

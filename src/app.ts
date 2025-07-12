@@ -11,7 +11,7 @@ import session from "express-session";
 import { PrismaSessionStore } from "@quixo3/prisma-session-store";
 import "./middleware/passport.local" // đăng kí strategy  passport
 import apiRoutes from "./routes/api";
-
+import cors from "cors";
 
 const app = express() // tạo express application
 const PORT = process.env.PORT || 8080// init port
@@ -53,7 +53,10 @@ app.use((req, res, next) => {
   res.locals.user = req.user || null;
   next();
 });;
-
+// cors
+app.use(cors({
+  origin:'http://localhost:5173'
+}))
 //Import routes + DB + seed:
 // //config routes
 webRoutes(app)
@@ -61,6 +64,7 @@ webRoutes(app)
 apiRoutes(app)
 // config database
 db()
+
 // seedDataBase
 initDataBase()
 // app.js hoặc server.js

@@ -108,9 +108,10 @@ const handleDeleteUser = async(
     const deleteUser =await prisma.user.delete({
         where:{id: +id}
     });
-    return deleteUser;
-    
+    console.log(`Đã xoá user với ID ${deleteUser.id}`)
+    return deleteUser
 }
+
 //VIEW
 const getUserById =async(id :number)=>{
     const userId =prisma.user.findUnique({

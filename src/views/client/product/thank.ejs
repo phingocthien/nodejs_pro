@@ -47,6 +47,7 @@
                 <div class="col-12 mt-5" >
                     <div class="alert alert-success" role="alert">
                         Cảm ơn các bạn đã đặt hàng , đơn hàng được xác nhận thanh toán thành công 
+                       
                     </div>
                 </div>
             </div>
@@ -118,6 +119,24 @@
             </div>      
         </div>
     </div>
+    <!-- paginate bootstrap -->
+    <div class="pagination d-flex justify-content-center mt-5">
+        <li class="<%= page === 1 ? 'disabled page-item' : 'page-item' %> ">
+            <a class="page-link"
+                href="/thank/?page=<%=page-1%>">Previous</a>
+        </li>
+        <% for(var i=1; i <=totalPages; i++) {%>
+            <li class="page-item">
+                <a class="<%= page === i ? 'active page-link' : 'page-link' %>"
+                    href="/thank/?page=<%= i  %>">
+                    <%= i %>
+                </a>
+            </li>
+            <% } %>
+            <li class="<%= page === totalPages ? 'disabled page-item' : 'page-item' %> ">
+                <a class="page-link"
+                    href="/thank/?page=<%=page+1%>">Next</a></li>
+        </div>
     <!-- Footer Start -->
     <%- include('../layout/footer'); -%>
   
