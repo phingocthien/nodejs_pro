@@ -32,17 +32,18 @@ header
                         </ol>
                     </div>
                     <div class="d-flex justify-content-between mb-4">
-                        <h3></h3>
-                        <a href="/admin/order"  class="btn btn-warning">Back
+                        <a href="/admin/order"  class="btn btn-warning">RollBack
                         </a>
                     </div>
                    
                 </div>
                 <table class="table table-bordered text-center w-75 m-auto text-white">
-                    <thead>
+                    <thead style="background-color: #233044;">
                         <tr>
-                            <th>Sản Phẩm</th>
+                            <th>Ảnh</th>
                             <th>Tên</th>
+                            <th>Hãng</th>
+                            <th>Mục đích</th>
                             <th>Giá cả</th>
                             <th>Số lượng</th>
                             <th>Thành tiền</th>
@@ -52,10 +53,16 @@ header
                         <% orderViews.forEach( function (orderView) { %>
                             <tr style="padding-top: 30px;">
                                 <td> 
-                                    <img src="/images/product/<%= orderView.product.image %>" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
+                                    <img src="/images/product/<%= orderView.product.image %>" class="img-fluidrounded-circle" style="width: 80px; height: 80px;" alt="">
                                 </td>
                                 <td class="pt-4">
                                     <%= orderView?.product?.name %>
+                                </td>
+                                <td class="pt-4">
+                                    <%= orderView?.product?.factory %>
+                                </td>
+                                <td class="pt-4">
+                                    <%= orderView?.product?.target %>
                                 </td>
                                 <td class="pt-4"> <%= new Intl.NumberFormat('vi-VN', { style: 'currency' , currency: 'VND'
                                 }).format(orderView.product.price) %></td>

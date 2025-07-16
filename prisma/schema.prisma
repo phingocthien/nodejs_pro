@@ -68,10 +68,8 @@ model Product {
   sold       Int?    @default(0) // mặc định bán 0 sản phẩm
   factory    String  @db.VarChar(255) // sản xuất
   target     String  @db.VarChar(255) // mục tiêu
-
   CartDetail  CartDetail[]
   orderDetail orderDetail[]
-
   @@map("products")
 }
 

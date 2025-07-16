@@ -1,7 +1,7 @@
 import  { Request, Response } from "express"
 import { getAllProduct, totalPageProduct } from "../../services/admin/product.service"
 import { getAllOrderPage, totalOrderPage } from "../../services/admin/order.service"
-import { getCount } from "../../services/admin/dashboard"
+import { getCount } from "../../services/admin/dashboard.service"
 
 const getAdmin=async(req:Request,res:Response)=>{
     const counts = await getCount()

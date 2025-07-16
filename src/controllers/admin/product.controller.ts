@@ -1,10 +1,15 @@
 import { Request, Response } from "express";
 import { productSchema, TProduct } from "../../validations/productSchema";
-import { handleCreateProduct, handleDeleteProduct, handleUpdateProduct, handleViewProduct } from "../../services/admin/product.service";
+import {
+  handleCreateProduct,
+  handleDeleteProduct,
+  handleUpdateProduct,
+  handleViewProduct,
+} from "../../services/admin/product.service";
 const getCreateProductPage = async (req: Request, res: Response) => {
   // Khởi tạo mảng lỗi và dữ liệu cũ để hiển thị trên form nếu cần
   const errors: string[] = [];
- // dữ liệu cũ
+  // dữ liệu cũ
   const oldData = {
     name: "",
     price: "",
@@ -23,7 +28,8 @@ const getCreateProductPage = async (req: Request, res: Response) => {
 
 //CREATE PRODUCT
 const postCreateProductPage = async (req: Request, res: Response) => {
-  const { name, price, ShortDesc, detailDesc, quality, factory, target } = req.body as TProduct;
+  const { name, price, ShortDesc, detailDesc, quality, factory, target } =
+    req.body as TProduct;
 
   // Kiểm tra dữ liệu với Zod schema
   const result = productSchema.safeParse(req.body);
@@ -31,10 +37,18 @@ const postCreateProductPage = async (req: Request, res: Response) => {
   if (!result.success) {
     // Trích xuất mảng lỗi
     const errorZod = result.error.issues;
-    const errors = errorZod?.map(item => `${item.message} (${item.path[0]})`);
+    const errors = errorZod?.map((item) => `${item.message} (${item.path[0]})`);
 
     // Giữ lại dữ liệu người dùng đã nhập để fill form lại
-    const oldData = { name, price, ShortDesc, detailDesc, quality, factory, target };
+    const oldData = {
+      name,
+      price,
+      ShortDesc,
+      detailDesc,
+      quality,
+      factory,
+      target,
+    };
 
     return res.render("admin/product/create-product", {
       errors,
@@ -73,7 +87,7 @@ const postDeleteProductPage = async (req: Request, res: Response) => {
 
     await handleDeleteProduct(id);
 
-   return res.redirect("/admin/product");
+    return res.redirect("/admin/product");
   } catch (error) {
     console.error("Error deleting product:", error);
     res.status(500).send("Internal Server Error");
@@ -107,7 +121,7 @@ const postViewProductPage = async (req: Request, res: Response) => {
       { name: "Doanh nhân", value: "DOANH-NHAN" },
     ];
 
-   return res.render("admin/product/view-product", {
+    return res.render("admin/product/view-product", {
       id,
       product,
       factoryOptions,
@@ -136,9 +150,19 @@ const postUpdateProductPage = async (req: Request, res: Response) => {
     if (!result.success) {
       // ❌ Nếu lỗi, render lại form với lỗi và dữ liệu cũ
       const errorZod = result.error.issues;
-      const errors = errorZod.map(item => `${item.message} (${item.path[0]})`);
+      const errors = errorZod.map(
+        (item) => `${item.message} (${item.path[0]})`
+      );
 
-      const oldData = { name, price, detailDesc, ShortDesc, quality, factory, target };
+      const oldData = {
+        name,
+        price,
+        detailDesc,
+        ShortDesc,
+        quality,
+        factory,
+        target,
+      };
 
       const product = await handleViewProduct(id); // cần product để lấy lại ảnh đã có
 
@@ -190,9 +214,9 @@ const postUpdateProductPage = async (req: Request, res: Response) => {
 };
 
 export {
-    getCreateProductPage,
-    postCreateProductPage,
-    postDeleteProductPage,
-    postViewProductPage,
-    postUpdateProductPage
-}
+  getCreateProductPage,
+  postCreateProductPage,
+  postDeleteProductPage,
+  postViewProductPage,
+  postUpdateProductPage,
+};

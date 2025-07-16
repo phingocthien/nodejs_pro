@@ -1,211 +1,217 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
     <meta name="description" content=" Dự án laptopshop" />
     <meta name="author" content="Hỏi Dân IT" />
     <title>Dashboard - laptopshop</title>
 
     <link href="/admin/css/styles.css" rel="stylesheet" />
-    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <script
+      src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
+      crossorigin="anonymous"
+    ></script>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-        /* Tùy chỉnh CSS cho Dashboard và biểu đồ */
-        .dashboard-container {
-            color: white;
-            padding: 20px;
-            border-radius: 8px;
-        }
+      /* Tùy chỉnh CSS cho Dashboard và biểu đồ */
+      .dashboard-container {
+        color: white;
+        padding: 20px;
+        border-radius: 8px;
+      }
 
-        .dashboard_content {
-            display: flex;
-            gap: 20px;
-            margin-top: 20px;
-        }
+      .dashboard_content {
+        display: flex;
+        gap: 20px;
+        margin-top: 20px;
+      }
 
-        .c-left {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 41px;
-        }
+      .c-left {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 41px;
+      }
 
-        .c-left .item {
-            background-color: #34495e;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            font-weight: bold;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            display: flex;
-            flex-direction: column;
-            justify-content: center; /* Căn giữa nội dung theo chiều dọc */
-            align-items: center;    /* Căn giữa nội dung theo chiều ngang */
-        }
+      .c-left .item {
+        background-color: #34495e;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        font-weight: bold;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* Căn giữa nội dung theo chiều dọc */
+        align-items: center; /* Căn giữa nội dung theo chiều ngang */
+      }
 
-        .c-left .item span:first-child {
-            font-size: 1.1em; /* Kích thước chữ cho tiêu đề */
-            margin-bottom: 5px;
-        }
+      .c-left .item span:first-child {
+        font-size: 1.1em; /* Kích thước chữ cho tiêu đề */
+        margin-bottom: 5px;
+      }
 
-        .c-left .item span:last-child {
-            font-size: 2em; /* Kích thước chữ lớn hơn cho số đếm */
-            font-weight: bold;
-        }
+      .c-left .item span:last-child {
+        font-size: 2em; /* Kích thước chữ lớn hơn cho số đếm */
+        font-weight: bold;
+      }
 
-        .c-right {
-            flex: 2;
-            background-color: #34495e;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            position: relative;
-            /* Đặt chiều cao cho c-right để biểu đồ có không gian */
-            min-height: 300px; /* Chiều cao tối thiểu cho biểu đồ */
-            display: flex; /* Dùng flex để căn giữa canvas nếu nó nhỏ hơn container */
-            justify-content: center;
-            align-items: center;
-        }
+      .c-right {
+        flex: 2;
+        background-color: #34495e;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        position: relative;
+        /* Đặt chiều cao cho c-right để biểu đồ có không gian */
+        min-height: 300px; /* Chiều cao tối thiểu cho biểu đồ */
+        display: flex; /* Dùng flex để căn giữa canvas nếu nó nhỏ hơn container */
+        justify-content: center;
+        align-items: center;
+      }
 
-        #myBarChart {
-            max-width: 100%;
-            width: 100%; /* Đảm bảo canvas lấp đầy chiều rộng của c-right */
-            height: 100%; /* Sẽ được kiểm soát bởi maintainAspectRatio: false và chiều cao của c-right */
-        }
+      #myBarChart {
+        max-width: 100%;
+        width: 100%; /* Đảm bảo canvas lấp đầy chiều rộng của c-right */
+        height: 100%; /* Sẽ được kiểm soát bởi maintainAspectRatio: false và chiều cao của c-right */
+      }
     </style>
-</head>
-<body class="sb-nav-fixed">
+  </head>
+  <body class="sb-nav-fixed">
     <%- include('../layout/header'); -%>
 
     <div id="layoutSidenav">
-        <%- include('../layout/navbar'); -%>
+      <%- include('../layout/navbar'); -%>
 
-        <div id="layoutSidenav_content" >
-            <main>
-                <script>
-                    // const countUser = 
-                    // Dữ liệu động được nhúng từ biến `counts` của EJS
-                    // Chúng ta sẽ tạo một mảng dữ liệu phù hợp cho biểu đồ cột
-                    const chartLabels = ["Users", "Products", "Orders"];
-                    const chartValues = [
-                        <%= counts.countUser %>,
-                        <%= counts.countProduct %>,
-                        <%= counts.countOrder %>
-                    ];
+      <div id="layoutSidenav_content">
+        <main>
+          <script>
+            // const countUser =
+            // Dữ liệu động được nhúng từ biến `counts` của EJS
+            // Chúng ta sẽ tạo một mảng dữ liệu phù hợp cho biểu đồ cột
+            const chartLabels = ["Users", "Products", "Orders"];
+            const chartValues = [
+                <%= counts.countUser %>,
+                <%= counts.countProduct %>,
+                <%= counts.countOrder %>
+            ];
 
-                    // Hàm để vẽ biểu đồ, gọi sau khi DOM đã tải xong
-                    document.addEventListener('DOMContentLoaded', function() {
-                        const ctx = document.getElementById('myBarChart');
+            // Hàm để vẽ biểu đồ, gọi sau khi DOM đã tải xong
+            document.addEventListener('DOMContentLoaded', function() {
+                const ctx = document.getElementById('myBarChart');
 
-                        if (ctx) {
-                            new Chart(ctx, {
-                                type: 'bar',
-                                data: {
-                                    labels: chartLabels, // Sử dụng các nhãn động
-                                    datasets: [
-                                        {
-                                            label: 'Total Counts', // Nhãn chung cho tất cả các cột
-                                            data: chartValues, // Sử dụng các giá trị động
-                                            backgroundColor: [
-                                                'rgba(136, 132, 216, 0.8)', // Màu cho Users
-                                                'rgba(130, 202, 157, 0.8)', // Màu cho Products
-                                                'rgba(255, 159, 64, 0.8)'  // Màu cho Orders
-                                            ],
-                                            borderColor: [
-                                                'rgba(136, 132, 216, 1)',
-                                                'rgba(130, 202, 157, 1)',
-                                                'rgba(255, 159, 64, 1)'
-                                            ],
-                                            borderWidth: 1
-                                        }
-                                    ]
-                                },
-                                options: {
-                                    responsive: true,
-                                    maintainAspectRatio: false,
-                                    scales: {
-                                        x: {
-                                            grid: {
-                                                display: false
-                                            },
-                                            ticks: {
-                                                color: 'white' // Màu chữ trên trục X
-                                            }
-                                        },
-                                        y: {
-                                            beginAtZero: true,
-                                            grid: {
-                                                color: 'rgba(255, 255, 255, 0.1)'
-                                            },
-                                            ticks: {
-                                                color: 'white' // Màu chữ trên trục Y
-                                            }
-                                        }
+                if (ctx) {
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: chartLabels, // Sử dụng các nhãn động
+                            datasets: [
+                                {
+                                    label: 'Total Counts', // Nhãn chung cho tất cả các cột
+                                    data: chartValues, // Sử dụng các giá trị động
+                                    backgroundColor: [
+                                        'rgba(136, 132, 216, 0.8)', // Màu cho Users
+                                        'rgba(130, 202, 157, 0.8)', // Màu cho Products
+                                        'rgba(255, 159, 64, 0.8)'  // Màu cho Orders
+                                    ],
+                                    borderColor: [
+                                        'rgba(136, 132, 216, 1)',
+                                        'rgba(130, 202, 157, 1)',
+                                        'rgba(255, 159, 64, 1)'
+                                    ],
+                                    borderWidth: 1
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                x: {
+                                    grid: {
+                                        display: false
                                     },
-                                    plugins: {
-                                        legend: {
-                                            display: true,
-                                            position: 'top',
-                                            labels: {
-                                                color: 'white'
-                                            }
-                                        },
-                                        title: {
-                                            display: true,
-                                            text: 'Tổng số lượng Người dùng, Sản phẩm, Đơn hàng',
-                                            color: 'white',
-                                            font: {
-                                                size: 16
-                                            }
-                                        },
-                                        tooltip: {
-                                            backgroundColor: 'rgba(0,0,0,0.7)',
-                                            titleColor: 'white',
-                                            bodyColor: 'white'
-                                        }
+                                    ticks: {
+                                        color: 'white' // Màu chữ trên trục X
+                                    }
+                                },
+                                y: {
+                                    beginAtZero: true,
+                                    grid: {
+                                        color: 'rgba(255, 255, 255, 0.1)'
+                                    },
+                                    ticks: {
+                                        color: 'white' // Màu chữ trên trục Y
                                     }
                                 }
-                            });
-                        } else {
-                            console.error('Canvas element not found!');
+                            },
+                            plugins: {
+                                legend: {
+                                    display: true,
+                                    position: 'top',
+                                    labels: {
+                                        color: 'white'
+                                    }
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Tổng số lượng Người dùng, Sản phẩm, Đơn hàng',
+                                    color: 'white',
+                                    font: {
+                                        size: 16
+                                    }
+                                },
+                                tooltip: {
+                                    backgroundColor: 'rgba(0,0,0,0.7)',
+                                    titleColor: 'white',
+                                    bodyColor: 'white'
+                                }
+                            }
                         }
                     });
-                </script>
+                } else {
+                    console.error('Canvas element not found!');
+                }
+            });
+          </script>
 
-                <div class="dashboard-container container-fluid px-4">
-                    <h3 class="dashboard_title ">Analytics Dashboard</h3>
-                    <div class="dashboard_content">
-                        <div class="c-left">
-                            <div class="item">
-                                <span>Total User</span>
-                                <span><%=counts.countUser%></span>
-                            </div>
-                            <div class="item">
-                                <span>Total Product</span>
-                                <span><%=counts.countProduct%></span>
-                            </div>
-                            <div class="item">
-                                <span>Total Order</span>
-                                <span><%=counts.countOrder%></span>
-                            </div>
-                        </div>
-                        <div class="c-right">
-                            <canvas id="myBarChart"></canvas>
-                        </div>
-                    </div>
+          <div class="dashboard-container container-fluid px-4">
+            <h3 class="dashboard_title">Analytics Dashboard</h3>
+            <div class="dashboard_content">
+              <div class="c-left">
+                <div class="item">
+                  <span>Total User</span>
+                  <span><%=counts.countUser%></span>
                 </div>
-            </main>
-            <%- include('../layout/footer'); -%>
-        </div>
+                <div class="item">
+                  <span>Total Product</span>
+                  <span><%=counts.countProduct%></span>
+                </div>
+                <div class="item">
+                  <span>Total Order</span>
+                  <span><%=counts.countOrder%></span>
+                </div>
+              </div>
+              <div class="c-right">
+                <canvas id="myBarChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </main>
+        <%- include('../layout/footer'); -%>
+      </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-        crossorigin="anonymous"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+      crossorigin="anonymous"
+    ></script>
     <script src="/admin/js/scripts.js"></script>
-</body>
-
+  </body>
 </html>
